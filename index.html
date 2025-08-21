@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profile Card Generator</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'Segoe UI', sans-serif; background-color: #f7f9fc; padding: 20px; margin: 0; }
+    .container { max-width: 900px; margin: auto; display: flex; gap: 30px; flex-wrap: wrap; }
+    .input-section, .preview-section { flex: 1; min-width: 300px; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    h2 { text-align: center; color: #2c3e50; margin-top: 0; }
+    label { display: block; margin-top: 15px; font-weight: 600; color: #34495e; }
+    input[type="text"], textarea, input[type="color"] { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #bdc3c7; border-radius: 6px; font-size: 16px; }
+    textarea { resize: vertical; min-height: 80px; }
+    button { margin-top: 20px; padding: 12px 18px; background-color: #3498db; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; transition: all 0.3s ease; }
+    button:hover { background-color: #2980b9; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+    .profile-card { border: 3px solid #8a2be2; padding: 20px; border-radius: 10px; background-color: #fdfefe; margin-top: 15px; transition: border-color 0.3s ease; }
+    .profile-card h3 { margin: 0 0 10px 0; color: #2c3e50; font-size: 22px; }
+    .profile-card p { margin: 8px 0; color: #34495e; line-height: 1.5; }
+    .like-btn { background-color: #8a2be2; padding: 10px 15px; font-size: 16px; display: flex; align-items: center; gap: 6px; border-radius: 6px; color: white; border: none; cursor: pointer; }
+    .like-btn:hover { opacity: 0.9; }
+    .liked { background-color: #e74c3c !important; transform: scale(1.05); }
+    .like-count { margin-top: 10px; color: #7f8c8d; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Input -->
+    <div class="input-section">
+      <h2>Edit Profile</h2>
+      <label for="name">Full Name</label>
+      <input type="text" id="name" value="" placeholder="Enter your name">
+
+      <label for="jobTitle">Job Title</label>
+      <input type="text" id="jobTitle" value="" placeholder="Enter your job">
+
+      <label for="bio">Bio</label>
+      <textarea id="bio" placeholder="Tell us about yourself"></textarea>
+
+      <label for="favoriteColor">Favorite Color</label>
+      <input type="color" id="favoriteColor" value="#28a745">
+
+      <button id="generateBtn">Generate Profile</button>
+    </div>
+
+    <!-- Preview -->
+    <div class="preview-section">
+      <h2>Your Profile Card</h2>
+      <div class="profile-card" id="profileCard">
+        <h3 id="cardName"></h3>
+        <p id="cardJob"></p>
+        <p id="cardBio"></p>
+        <button class="like-btn" id="likeBtn">
+          ❤️ <span id="likeText">Like</span>
+        </button>
+        <p class="like-count" id="likeCount">0 likes</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const nameInput = document.getElementById('name');
+    const jobTitleInput = document.getElementById('jobTitle');
+    const bioInput = document.getElementById('bio');
+    const colorInput = document.getElementById('favoriteColor');
+    const cardName = document.getElementById('cardName');
+    const cardJob = document.getElementById('cardJob');
+    const cardBio = document.getElementById('cardBio');
+    const profileCard = document.getElementById('profileCard');
+    const likeBtn = document.getElementById('likeBtn');
+    const likeText = document.getElementById('likeText');
+    const likeCount = document.getElementById('likeCount');
+
+    let likes = 0, hasLiked = false;
+
+    // Live updates
+    nameInput.oninput = () => cardName.textContent = nameInput.value || 'Your Name';
+    jobTitleInput.oninput = () => cardJob.textContent = jobTitleInput.value || 'Your Job';
+    bioInput.oninput = () => cardBio.textContent = bioInput.value || 'Your bio here...';
+    colorInput.oninput = () => {
+      let c = colorInput.value;
+      profileCard.style.borderColor = c;
+      if (!hasLiked) likeBtn.style.backgroundColor = c;
+    };
+
+    // Generate button
+    document.getElementById('generateBtn').onclick = () => {
+      cardName.textContent = nameInput.value || 'Your Name';
+      cardJob.textContent = jobTitleInput.value || 'Your Job';
+      cardBio.textContent = bioInput.value || 'Your bio here...';
+      profileCard.style.borderColor = colorInput.value;
+      if (!hasLiked) likeBtn.style.backgroundColor = colorInput.value;
+      alert("Profile Generated! ✅");
+    };
+
+    // Like button toggle
+    likeBtn.onclick = () => {
+      hasLiked = !hasLiked;
+      likes += hasLiked ? 1 : -1;
+      likeBtn.classList.toggle('liked', hasLiked);
+      likeText.textContent = hasLiked ? 'Liked!' : 'Like';
+      likeCount.textContent = `${likes} like${likes !== 1 ? 's' : ''}`;
+    };
+
+    // Initialize
+    window.onload = () => {
+      profileCard.style.borderColor = colorInput.value;
+      likeBtn.style.backgroundColor = colorInput.value;
+      likeCount.textContent = `${likes} like${likes !== 1 ? 's' : ''}`;
+    };
+  </script>
+</body>
+</html>
